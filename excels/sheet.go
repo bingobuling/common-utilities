@@ -12,13 +12,13 @@ import (
 )
 
 type Sheet struct {
-	Name 			string
-	BeginRow		int
-	BeginCol		int
-	ColumnDefines 	[]*ColumnDefine
-	DataSource      interface{} //要导出的数据
-	data       		[]interface{} //DataSource进行变换
-	handlingRow		int
+	Name          string
+	BeginRow      int
+	BeginCol      int
+	ColumnDefines []*ColumnDefine
+	DataSource    interface{}   //要导出的数据
+	data          []interface{} //DataSource进行变换
+	handlingRow   int
 }
 
 func (p *Sheet) fillFile(xlsxFile *excelize.File) error {
@@ -28,7 +28,7 @@ func (p *Sheet) fillFile(xlsxFile *excelize.File) error {
 	}
 	xlsxFile.NewSheet(p.Name)
 	p.fillTitleRow(xlsxFile)
-	for _,item := range p.data {
+	for _, item := range p.data {
 		values := make([]interface{}, len(p.ColumnDefines))
 		for index, col := range p.ColumnDefines {
 			values[index] = col.ValueExtractor(item)
@@ -45,11 +45,11 @@ func (p *Sheet) check() error {
 	if p.BeginCol < 0 {
 		p.BeginCol = 0
 	}
-	if p.BeginRow <0 {
+	if p.BeginRow < 0 {
 		p.BeginRow = 0
 	}
 	p.handlingRow = p.BeginRow
-	dataSlice,err := p.convertToSlice(p.DataSource)
+	dataSlice, err := p.convertToSlice(p.DataSource)
 	if err != nil {
 		return err
 	}
@@ -57,7 +57,7 @@ func (p *Sheet) check() error {
 	if p.ColumnDefines == nil || len(p.ColumnDefines) == 0 {
 		return errors.New("sheet ColumnDefine can not be empty")
 	}
-	for _,item := range p.ColumnDefines {
+	for _, item := range p.ColumnDefines {
 		if item.Width <= 0 {
 			item.Width = 10
 		}
@@ -81,19 +81,19 @@ func (p *Sheet) convertToSlice(data interface{}) ([]interface{}, error) {
 func (p *Sheet) fillTitleRow(xlsx *excelize.File) {
 	p.handlingRow++ //因为handlingRow是从0开始的，而依赖的excelize从1开始的
 	strRowNum := strconv.Itoa(p.handlingRow)
-	for index,item := range p.ColumnDefines {
+	for index, item := range p.ColumnDefines {
 		col := string('A' + p.BeginCol + index)
 		axis := col + strRowNum
-		xlsx.SetColWidth(p.Name,col,col, item.Width)
+		xlsx.SetColWidth(p.Name, col, col, item.Width)
 		xlsx.SetCellValue(p.Name, axis, item.Title)
 	}
 }
 
-func (p *Sheet) fillRow(values []interface{},xlsx *excelize.File) {
+func (p *Sheet) fillRow(values []interface{}, xlsx *excelize.File) {
 	p.handlingRow++
 	strRowNum := strconv.Itoa(p.handlingRow)
-	for index,value := range values {
-		axis := string('A' + p.BeginCol + index) + strRowNum
+	for index, value := range values {
+		axis := string('A'+p.BeginCol+index) + strRowNum
 		xlsx.SetCellValue(p.Name, axis, value)
 	}
 }

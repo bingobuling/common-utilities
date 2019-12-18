@@ -3,18 +3,19 @@
 package caches
 
 import (
-	"common-utilities/utilities"
-	"testing"
 	"fmt"
+	"github.com/bingobuling/common-utilities/utilities"
 	"sync"
+	"testing"
 	"time"
 )
 
 var testingSimpleCache = CreateSimpleCacheExpire(time.Minute * 5)
+
 func TestSimpleCache(t *testing.T) {
 	//r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	key := "zhangs"
-	for j:=0;j<1000;j++ {
+	for j := 0; j < 1000; j++ {
 		if j%2 == 0 {
 			go testingSimpleCache.Get(key)
 		} else if j%3 == 0 {
@@ -28,13 +29,13 @@ func TestSimpleCache(t *testing.T) {
 	fmt.Println(testingSimpleCache.Get(key))
 }
 func TestSimpleCache2(t *testing.T) {
-	for i:=0; i<10; i++ {
+	for i := 0; i < 10; i++ {
 		go func() {
 			value := testingSimpleCache.Get("zhangs")
 			fmt.Println(value)
-		} ()
+		}()
 		go func(z int) {
-			testingSimpleCache.Put("zhangs",z)
+			testingSimpleCache.Put("zhangs", z)
 		}(i)
 	}
 }
@@ -42,12 +43,12 @@ func TestSimpleCache2(t *testing.T) {
 func TestGarbageCollection(t *testing.T) {
 	cache := CreateSimpleCache()
 
-	for i:=0;i<100;i++ {
-		cache.Put(utilities.GetRandomNumStr(4),"1")
+	for i := 0; i < 100; i++ {
+		cache.Put(utilities.GetRandomNumStr(4), "1")
 	}
-	fmt.Println("begin cache size:",len(cache.cache))
+	fmt.Println("begin cache size:", len(cache.cache))
 	time.Sleep(30 * time.Second)
-	fmt.Println("end cache size:",len(cache.cache))
+	fmt.Println("end cache size:", len(cache.cache))
 }
 func TestRwMutex(t *testing.T) {
 	rw := sync.RWMutex{}

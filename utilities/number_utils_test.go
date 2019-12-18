@@ -3,12 +3,12 @@
 package utilities
 
 import (
-	"testing"
 	"fmt"
 	"math"
 	"math/rand"
-	"time"
 	"strconv"
+	"testing"
+	"time"
 )
 
 func TestRound(t *testing.T) {
@@ -16,17 +16,17 @@ func TestRound(t *testing.T) {
 	fmt.Println(Floor(3.9456, 2))
 	fmt.Println(Ceil(3.123, 2))
 	fmt.Println(Round(3.9-0.00001, 6))
-	fmt.Println(Round(0.999 /10000000,10))
+	fmt.Println(Round(0.999/10000000, 10))
 	fmt.Println(math.Floor(3.123))
 }
 
 func TestRound2(t *testing.T) {
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
-	for  {
+	for {
 		f1 := r.NormFloat64()
 		f1 = math.Abs(f1 / 100.0)
-		f1 =  Round(f1 , 6)
-		s := strconv.FormatFloat(f1,'f', -1, 64)
+		f1 = Round(f1, 6)
+		s := strconv.FormatFloat(f1, 'f', -1, 64)
 		if len(s) > 8 {
 			fmt.Println(s)
 			break
@@ -49,16 +49,16 @@ func TestRound3(t *testing.T) {
 }
 
 func TestCompare(t *testing.T) {
-	f1,f2 := 0.5,0.500001
-	fmt.Println(Compare(f1,f2))
-	fmt.Println(CompareWithScale(f1,f2, 1))
+	f1, f2 := 0.5, 0.500001
+	fmt.Println(Compare(f1, f2))
+	fmt.Println(CompareWithScale(f1, f2, 1))
 }
 
 func TestTrunc(t *testing.T) {
-	fmt.Println(Trunc(1.9999999,3))
+	fmt.Println(Trunc(1.9999999, 3))
 }
 
 func TestTTT(t *testing.T) {
-	fmt.Println(Round(float64(10.99999999) / 10000, 8))
+	fmt.Println(Round(float64(10.99999999)/10000, 8))
 	fmt.Println(strconv.FormatFloat(1.234561291, 'g', 8, 64))
 }

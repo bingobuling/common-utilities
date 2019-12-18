@@ -5,13 +5,15 @@ package algorithm
 
 const (
 	insertSortThreshold = 47  //数据量小于这个，那么会使用插入排序
-	quickSortThreshold = 286 //如果数据量小于改常量，那么会选择快速排序
+	quickSortThreshold  = 286 //如果数据量小于改常量，那么会选择快速排序
 )
+
 type sorter struct {
-	length int
+	length  int
 	compare *func(i, j int) int
-	swap *func(i, j int)
+	swap    *func(i, j int)
 }
+
 //Sort方法，该方法会判断数据量的大小，状况而选择相应的算法进行排序，该方法接受3个参数
 //length为待排数据长度
 //compare是一个对数据进行比较的函数，该方法接受两个int类型的参数，即数据的下标，即待比较的两个元素下标
@@ -20,15 +22,15 @@ type sorter struct {
 //swap是交换顺序
 func Sort(length int, compare func(i, j int) int, swap func(i, j int)) {
 	s := &sorter{
-		length: length,
+		length:  length,
 		compare: &compare,
-		swap: &swap,
+		swap:    &swap,
 	}
 	if length < insertSortThreshold {
 		insertSort(1, length, compare, swap)
-	}else if length < quickSortThreshold {
+	} else if length < quickSortThreshold {
 		quickSort(s)
-	}else {
+	} else {
 		quickSort(s)
 		//mergeSort(s)
 	}
@@ -40,7 +42,7 @@ func mergeSort(s *sorter) {
 
 // 快排
 func quickSort(s *sorter) {
-	_quickSort(0, s.length, maxDepth(s.length), s,)
+	_quickSort(0, s.length, maxDepth(s.length), s)
 }
 
 func _quickSort(low, high, maxDepth int, s *sorter) {
@@ -54,7 +56,7 @@ func _quickSort(low, high, maxDepth int, s *sorter) {
 		if mlo-low < high-mhi {
 			_quickSort(low, mlo, maxDepth, s)
 			low = mhi // i.e., quickSort(data, mhi, b)
-		}else {
+		} else {
 			_quickSort(mhi, high, maxDepth, s)
 			high = mlo // i.e., quickSort(data, a, mlo)
 		}
@@ -181,7 +183,7 @@ func medianOfThree(m1, m0, m2 int, s *sorter) {
 
 // siftDown implements the heap property on data[lo, hi).
 // first is an offset into the array where the root of the heap lies.
-func siftDown( lo, hi, first int, s *sorter) {
+func siftDown(lo, hi, first int, s *sorter) {
 	root := lo
 	for {
 		child := 2*root + 1
@@ -198,7 +200,7 @@ func siftDown( lo, hi, first int, s *sorter) {
 		root = child
 	}
 }
-func heapSort(a,b int, s *sorter) {
+func heapSort(a, b int, s *sorter) {
 	first := a
 	lo := 0
 	hi := b - a
@@ -218,7 +220,7 @@ func heapSort(a,b int, s *sorter) {
 // 直接插入排序，适合为数据量小，基本有续的待排数据
 func insertSort(low, high int, compare func(i, j int) int, swap func(i, j int)) {
 	for i := low; i < high; i++ {
-		for j := i; j>0 && compare(j, j-1) < 0; j-- {
+		for j := i; j > 0 && compare(j, j-1) < 0; j-- {
 			swap(j, j-1)
 		}
 	}
@@ -226,7 +228,7 @@ func insertSort(low, high int, compare func(i, j int) int, swap func(i, j int)) 
 
 // 倒转序列
 func reverseArr(length int, swap func(i, j int)) {
-	left, right := 0, length - 1
+	left, right := 0, length-1
 	for left < right {
 		swap(left, right)
 		left++

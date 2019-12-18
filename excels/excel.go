@@ -11,8 +11,8 @@ import (
 )
 
 type Excel struct {
-	Sheets 		[]*Sheet
-	cachedFile 	*excelize.File
+	Sheets     []*Sheet
+	cachedFile *excelize.File
 }
 
 func (p *Excel) Write(w io.Writer) error {
@@ -27,14 +27,14 @@ func (p *Excel) Write(w io.Writer) error {
 	return p.cachedFile.Write(w)
 }
 
-func (p *Excel) Download(header http.Header, w io.Writer, fileName string) error{
+func (p *Excel) Download(header http.Header, w io.Writer, fileName string) error {
 	if fileName == "" {
 		fileName = "excel-exports.xlsx"
 	} else if !strings.HasSuffix(fileName, ".xlsx") {
 		fileName += ".xlsx"
 	}
 	header.Add("Content-Type", "multipart/form-data")
-	header.Add("Content-Disposition", "attachment;fileName=" + fileName)
+	header.Add("Content-Disposition", "attachment;fileName="+fileName)
 	return p.Write(w)
 }
 

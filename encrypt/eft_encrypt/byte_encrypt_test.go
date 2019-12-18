@@ -3,9 +3,9 @@
 package eft_encrypt
 
 import (
-	"testing"
 	"fmt"
-	"common-utilities/encrypt"
+	"github.com/bingobuling/common-utilities/encrypt"
+	"testing"
 )
 
 func TestByteEncrypt(t *testing.T) {
@@ -17,8 +17,8 @@ func TestByteEncrypt(t *testing.T) {
 	fmt.Println(decode == tt)
 }
 func TestByteEncrypt2(t *testing.T) {
-	for i:=0; i<100;i++ {
-		privateKey,_,_ := encrypt.GenKeyPairs(2048)
+	for i := 0; i < 100; i++ {
+		privateKey, _, _ := encrypt.GenKeyPairs(2048)
 		newPrivateKey := byteEncrypt(privateKey)
 		decodedPrivateKey := byteDecrypt(newPrivateKey)
 		if decodedPrivateKey != privateKey {
@@ -26,4 +26,3 @@ func TestByteEncrypt2(t *testing.T) {
 		}
 	}
 }
-

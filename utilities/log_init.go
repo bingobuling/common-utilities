@@ -23,7 +23,6 @@ func init() {
 	//log.SetLevel(log.WarnLevel)
 }
 
-
 func InitLogrus(logPath string, logFileName string, maxAge time.Duration, rotationTime time.Duration) {
 	baseLogPath := path.Join(logPath, logFileName)
 	writer, err := rotatelogs.New(

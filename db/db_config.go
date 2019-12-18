@@ -5,12 +5,12 @@ package db
 import "github.com/pkg/errors"
 
 type DBConfig struct {
-	DBAddr				string
-	AutoCreateTables 	[]interface{} //自动创建的表，不设置则不创建表
-	MaxIdleConns 		int			  //数据库连接池设置——最大空闲数，不设置则为10
-	MaxOpenConns 		int			  //数据库连接池设置——最大打开的连接数，不设置则为100
-	LogMode		 		bool		  //是否打印gorm的日志
-	DetectionInterval	int			  //心跳检测间隔，单位为s，默认30s,小于0则不检测
+	DBAddr            string
+	AutoCreateTables  []interface{} //自动创建的表，不设置则不创建表
+	MaxIdleConns      int           //数据库连接池设置——最大空闲数，不设置则为10
+	MaxOpenConns      int           //数据库连接池设置——最大打开的连接数，不设置则为100
+	LogMode           bool          //是否打印gorm的日志
+	DetectionInterval int           //心跳检测间隔，单位为s，默认30s,小于0则不检测
 }
 
 func (p *DBConfig) check() error {

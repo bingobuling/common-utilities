@@ -11,9 +11,9 @@ import (
 )
 
 type ConfigMap struct {
-	FilePath 			string
-	Pointer     		interface{}
-	LoadedCallBack 		func(*ConfigMap, error) 	//加载后的回调方法，不设置那么就回调，里面的error是加载toml的错误
+	FilePath       string
+	Pointer        interface{}
+	LoadedCallBack func(*ConfigMap, error) //加载后的回调方法，不设置那么就回调，里面的error是加载toml的错误
 }
 
 func InitTomlConfig(cm *ConfigMap) {
@@ -53,6 +53,6 @@ func InitTomlConfigs(cm []*ConfigMap) {
 }
 
 func DecodeToml(filepath string, pointer interface{}) error {
-	_,err := toml.DecodeFile(filepath, pointer)
+	_, err := toml.DecodeFile(filepath, pointer)
 	return err
 }

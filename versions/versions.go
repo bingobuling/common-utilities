@@ -1,6 +1,6 @@
 //author bing.xin
 //time  2018/10/23 17:19
-//desc 
+//desc
 package versions
 
 import (
@@ -9,8 +9,8 @@ import (
 )
 
 var (
-	BuildVersion	string
-	BuildTime		string
+	BuildVersion string
+	BuildTime    string
 )
 
 func init() {

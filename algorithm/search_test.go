@@ -40,18 +40,18 @@ func TestBinarySearch(t *testing.T) {
 		fmt.Println("not found " + value)
 		return
 	}
-	fmt.Println(tt[index].s+" index is:"+ strconv.Itoa(index))
+	fmt.Println(tt[index].s + " index is:" + strconv.Itoa(index))
 }
 
 func TestTT(t *testing.T) {
-	fmt.Println(numUniqueEmails([]string{"test.email+alex@leetcode.com","test.e.mail+bob.cathy@leetcode.com","testemail+david@lee.tcode.com"}))
+	fmt.Println(numUniqueEmails([]string{"test.email+alex@leetcode.com", "test.e.mail+bob.cathy@leetcode.com", "testemail+david@lee.tcode.com"}))
 }
 func numUniqueEmails(emails []string) int {
 	m := make(map[string]int)
 	for _, email := range emails {
 		index := strings.LastIndex(email, "@")
 		localName := email[:index]
-		localName = strings.Replace(localName, ".","", -1)
+		localName = strings.Replace(localName, ".", "", -1)
 		pIndex := strings.IndexRune(localName, '+')
 		if pIndex != -1 {
 			localName = localName[:pIndex]

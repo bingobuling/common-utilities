@@ -4,9 +4,9 @@
 package common_models
 
 type Resp struct {
-	Code 		int 				`json:"code"`
-	Message 	string 				`json:"message"`
-	Data    	interface{} 		`json:"data"` //data 待废弃
+	Code    int         `json:"code"`
+	Message string      `json:"message"`
+	Data    interface{} `json:"data"` //data 待废弃
 }
 
 var BadRequest = Resp{}.FailedWithCode(400, "bad request")

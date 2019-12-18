@@ -5,11 +5,11 @@ import (
 )
 
 // NewWechatPaySSLClient
-func NewWechatPaySSLClient(appId,mchId,mchKey,sslCertPath,sslKeyPath string) (*core.Client,error){
-	sslHttpClient,err := core.NewTLSHttpClient(sslCertPath,sslKeyPath)
+func NewWechatPaySSLClient(appId, mchId, mchKey, sslCertPath, sslKeyPath string) (*core.Client, error) {
+	sslHttpClient, err := core.NewTLSHttpClient(sslCertPath, sslKeyPath)
 	if err != nil {
 		return nil, err
 	}
-	client := core.NewClient(appId,mchId,mchKey,sslHttpClient)
+	client := core.NewClient(appId, mchId, mchKey, sslHttpClient)
 	return client, nil
 }

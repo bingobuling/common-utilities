@@ -4,7 +4,7 @@
 package excels
 
 type ColumnDefine struct {
-	Title				string
-	Width				float64
-	ValueExtractor		func(data interface{}) interface{}
+	Title          string
+	Width          float64
+	ValueExtractor func(data interface{}) interface{}
 }

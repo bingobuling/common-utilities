@@ -4,7 +4,7 @@
 package db
 
 type RedisConfig struct {
-	RedisAddr		string
-	RedisPwd		string
-	RedisDB			int
+	RedisAddr string
+	RedisPwd  string
+	RedisDB   int
 }

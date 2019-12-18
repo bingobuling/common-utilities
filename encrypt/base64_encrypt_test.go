@@ -3,20 +3,20 @@
 package encrypt
 
 import (
-	"testing"
-	"fmt"
 	"encoding/base64"
+	"fmt"
+	"testing"
 )
 
 func TestDecodeKey(t *testing.T) {
-	for i := 0; i<10; i++ {
+	for i := 0; i < 10; i++ {
 		base64Encoding := base64.NewEncoding(GenerateBase64Encoder())
 		privateKey, publicKey, _ := GenKeyPairs(2048)
-		encode := Base64Encode(base64Encoding,privateKey)
-		decode, _ := Base64Decode(base64Encoding,encode)
+		encode := Base64Encode(base64Encoding, privateKey)
+		decode, _ := Base64Decode(base64Encoding, encode)
 		flag1 := decode == privateKey
-		encode2 := Base64Encode(base64Encoding,publicKey)
-		decode2, _ := Base64Decode(base64Encoding,encode2)
+		encode2 := Base64Encode(base64Encoding, publicKey)
+		decode2, _ := Base64Decode(base64Encoding, encode2)
 		flag2 := decode2 == publicKey
 		if !flag1 || !flag2 {
 			fmt.Println("failed")
@@ -24,7 +24,6 @@ func TestDecodeKey(t *testing.T) {
 	}
 }
 
-
-func TestGenBase64Salt(t *testing.T){
+func TestGenBase64Salt(t *testing.T) {
 	fmt.Println(GenerateBase64Encoder())
 }

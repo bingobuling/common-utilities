@@ -14,20 +14,21 @@ func TestPost(t *testing.T) {
 }
 
 type zz struct {
-	H 	 string `json:"h"`
+	H    string `json:"h"`
 	Body []byte `json:"body"`
 }
+
 func TestBody(t *testing.T) {
 	f := &f{
 		TT: "1",
 		CC: 2,
 	}
-	byt,_ := json.Marshal(f)
+	byt, _ := json.Marshal(f)
 	z := &zz{
-		H: "111",
+		H:    "111",
 		Body: byt,
 	}
-	byt,_ = json.Marshal(z)
+	byt, _ = json.Marshal(z)
 	nz := &zz{}
 	json.Unmarshal(byt, nz)
 	fmt.Println(string(nz.Body))
@@ -35,7 +36,7 @@ func TestBody(t *testing.T) {
 
 type f struct {
 	TT string `json:"tt"`
-	CC int `json:"cc"`
+	CC int    `json:"cc"`
 }
 
 func TestQuery(t *testing.T) {
@@ -43,12 +44,12 @@ func TestQuery(t *testing.T) {
 		TT: "12",
 		CC: 2,
 	}
-	byt,err := json.Marshal(&zf)
-	fmt.Println(byt,err)
+	byt, err := json.Marshal(&zf)
+	fmt.Println(byt, err)
 	m := make(map[string]interface{})
 	json.Unmarshal(byt, &m)
 	fmt.Println(m)
-	func(b []byte){
+	func(b []byte) {
 		fmt.Println(len(b))
 	}(nil)
 }
@@ -56,4 +57,3 @@ func TestQuery(t *testing.T) {
 func TestGetQueryStr(t *testing.T) {
 	fmt.Println(GetQueryStr("http://fdsfs.com?fdsfsfd"))
 }
-

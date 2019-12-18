@@ -8,11 +8,12 @@ import (
 	"math/rand"
 	"time"
 )
-func Base64Encode(encoding *base64.Encoding, key string) string{
+
+func Base64Encode(encoding *base64.Encoding, key string) string {
 	return encoding.EncodeToString([]byte(key))
 }
 
-func Base64Decode(encoding *base64.Encoding, base64Str string) (string,error){
+func Base64Decode(encoding *base64.Encoding, base64Str string) (string, error) {
 	resultBytes, err := encoding.DecodeString(base64Str)
 	return string(resultBytes), err
 }
@@ -22,10 +23,10 @@ func GenerateBase64Encoder() string {
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	raw := "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
 	newRawBytes := make([]byte, len(raw))
-	for i:=0; i<len(newRawBytes); i++ {
+	for i := 0; i < len(newRawBytes); i++ {
 		index := r.Intn(len(raw))
 		newRawBytes[i] = raw[index]
-		raw = raw[0:index] + raw[index + 1:]
+		raw = raw[0:index] + raw[index+1:]
 	}
 	newRaw := string(newRawBytes) + "+/"
 	return newRaw

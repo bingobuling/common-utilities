@@ -5,9 +5,9 @@ package excels
 
 import (
 	"fmt"
+	"github.com/bingobuling/common-utilities/common_models"
 	"reflect"
 	"testing"
-	"common-utilities/common_models"
 )
 
 func TestF(t *testing.T) {
@@ -23,7 +23,7 @@ func TestF(t *testing.T) {
 	fmt.Println(zz[0].(*common_models.Resp))
 }
 
-func D(list interface{}) []interface{}{
+func D(list interface{}) []interface{} {
 	value := reflect.ValueOf(list)
 	if value.Kind() != reflect.Slice {
 		panic("to slice arr not slice")

@@ -4,9 +4,9 @@
 package alipay
 
 import (
-	"common-utilities/payment/alipay/alipayModels"
 	"encoding/json"
 	"errors"
+	"github.com/bingobuling/common-utilities/payment/alipay/alipayModels"
 	"github.com/sirupsen/logrus"
 	"github.com/smartwalle/alipay"
 )
@@ -37,4 +37,3 @@ func QueryAliTrade(tradeNo string, alipayClient *AlipayClient) (*alipayModels.Qu
 	}
 	return returnResp, nil
 }
-

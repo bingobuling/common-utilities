@@ -4,22 +4,21 @@ package paypal
 
 import (
 	"bytes"
-	"common-utilities/http_utils"
 	"encoding/base64"
 	"encoding/json"
-	"time"
+	"github.com/bingobuling/common-utilities/http_utils"
 	"github.com/pkg/errors"
 	"sync"
+	"time"
 )
 
-
 type PaypalClient struct {
-	ClientId 				string
-	Secret	 				string
-	baseApi	 				string
-	lastGetAccessTokenTime	int64  //上一次获取accessTime，单位为秒
-	token         			*AccessToken
-	accessTokenLock			sync.Mutex
+	ClientId               string
+	Secret                 string
+	baseApi                string
+	lastGetAccessTokenTime int64 //上一次获取accessTime，单位为秒
+	token                  *AccessToken
+	accessTokenLock        sync.Mutex
 }
 
 //同一个client id, pay pal client应当是单例的
@@ -29,9 +28,9 @@ func NewPaypalClient(clientId, secret string, prodEnv bool) *PaypalClient {
 		baseApi = apiLiveBase
 	}
 	return &PaypalClient{
-		ClientId: clientId,
-		Secret: secret,
-		baseApi: baseApi,
+		ClientId:        clientId,
+		Secret:          secret,
+		baseApi:         baseApi,
 		accessTokenLock: sync.Mutex{},
 	}
 }
@@ -52,13 +51,13 @@ func (p *PaypalClient) GetAccessToken() (resp *GetAccessTokenResp, err error) {
 	err = json.Unmarshal(byt, token)
 	if err == nil {
 		p.lastGetAccessTokenTime = time.Now().Unix()
-		p.token = &AccessToken {
-			Scope: token.Scope,
-			Nonce: token.Nonce,
+		p.token = &AccessToken{
+			Scope:       token.Scope,
+			Nonce:       token.Nonce,
 			AccessToken: token.AccessToken,
-			TokenType: token.TokenType,
-			AppId: token.AppId,
-			ExpiresIn: token.ExpiresIn,
+			TokenType:   token.TokenType,
+			AppId:       token.AppId,
+			ExpiresIn:   token.ExpiresIn,
 		}
 	}
 	return
@@ -76,7 +75,7 @@ func (p *PaypalClient) CreatePayout(req *PayoutReq) (resp *PayoutResp, err error
 		return nil, errors.WithMessage(err1, "author error")
 	}
 	url := p.baseApi + "/v1/payments/payouts"
-	byt ,err = http_utils.Post(url, bytes.NewReader(byt), header)
+	byt, err = http_utils.Post(url, bytes.NewReader(byt), header)
 	if err != nil && len(byt) == 0 {
 		return
 	}
@@ -85,14 +84,14 @@ func (p *PaypalClient) CreatePayout(req *PayoutReq) (resp *PayoutResp, err error
 	return
 }
 
-func (p *PaypalClient) GetPayout(batchId string) (resp *GetPayoutResp, err error){
+func (p *PaypalClient) GetPayout(batchId string) (resp *GetPayoutResp, err error) {
 	header, err1 := p.authHeader()
 	if err1 != nil {
 		return nil, errors.WithMessage(err1, "author error")
 	}
 	url := p.baseApi + "/v1/payments/payouts/" + batchId
 	byt, err1 := http_utils.Get(url, header)
-	if err1 != nil  && len(byt) == 0 {
+	if err1 != nil && len(byt) == 0 {
 		return nil, err1
 	}
 	resp = &GetPayoutResp{}
@@ -107,7 +106,7 @@ func (p *PaypalClient) GetPayoutItem(payoutItemId string) (resp *GetPayoutItemRe
 	}
 	url := p.baseApi + "/v1/payments/payouts-item/" + payoutItemId
 	byt, err1 := http_utils.Get(url, header)
-	if err1 != nil  && len(byt) == 0 {
+	if err1 != nil && len(byt) == 0 {
 		return nil, err1
 	}
 	resp = &GetPayoutItemResp{}
@@ -115,14 +114,14 @@ func (p *PaypalClient) GetPayoutItem(payoutItemId string) (resp *GetPayoutItemRe
 	return
 }
 
-func (p *PaypalClient) CancelUnClaimedPayoutItem(payoutItemId string) (resp *CancelPayoutItemResp, err error){
+func (p *PaypalClient) CancelUnClaimedPayoutItem(payoutItemId string) (resp *CancelPayoutItemResp, err error) {
 	header, err1 := p.authHeader()
 	if err1 != nil {
 		return nil, errors.WithMessage(err1, "author error")
 	}
-	url := p.baseApi + "/v1/payments/payouts-item/" +payoutItemId+ "/cancel"
+	url := p.baseApi + "/v1/payments/payouts-item/" + payoutItemId + "/cancel"
 	byt, err1 := http_utils.Post(url, nil, header)
-	if err1 != nil  && len(byt) == 0 {
+	if err1 != nil && len(byt) == 0 {
 		return nil, err1
 	}
 	resp = &CancelPayoutItemResp{}
@@ -133,9 +132,9 @@ func (p *PaypalClient) CancelUnClaimedPayoutItem(payoutItemId string) (resp *Can
 func (p *PaypalClient) authHeader() (map[string]string, error) {
 	if p.needRefreshAccessToken() {
 		p.accessTokenLock.Lock()
-		defer func(){
+		defer func() {
 			p.accessTokenLock.Unlock()
-		} ()
+		}()
 		if p.needRefreshAccessToken() {
 			//需要重新获取accessToken
 			_, err := p.GetAccessToken()
@@ -144,21 +143,21 @@ func (p *PaypalClient) authHeader() (map[string]string, error) {
 			}
 		}
 	}
-	return map[string]string {
-		"Accept": "application/json",
-		"Authorization": p.token.TokenType + " " + p.token.AccessToken,
-		"Content-Type": "application/json",
+	return map[string]string{
+		"Accept":          "application/json",
+		"Authorization":   p.token.TokenType + " " + p.token.AccessToken,
+		"Content-Type":    "application/json",
 		"Accept-Language": "en_US",
 	}, nil
 }
 
 func (p *PaypalClient) needRefreshAccessToken() bool {
-	return p.token == nil || time.Now().Unix() - p.lastGetAccessTokenTime - p.token.ExpiresIn <= requsetAccessTokenBeforeExpired
+	return p.token == nil || time.Now().Unix()-p.lastGetAccessTokenTime-p.token.ExpiresIn <= requsetAccessTokenBeforeExpired
 }
 
 func (p *PaypalClient) baseAuthHeader() map[string]string {
 	header := map[string]string{}
-	auth := "Basic " + base64.StdEncoding.EncodeToString([]byte(p.ClientId + ":" + p.Secret))
+	auth := "Basic " + base64.StdEncoding.EncodeToString([]byte(p.ClientId+":"+p.Secret))
 	header["Authorization"] = auth
 	header["Accept-Language"] = "en_US"
 	header["Accept"] = "application/json"

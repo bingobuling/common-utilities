@@ -3,14 +3,14 @@
 package sms
 
 import (
-	"common-utilities/http_utils"
-	"common-utilities/utilities"
 	"crypto/hmac"
 	"crypto/sha1"
 	"encoding/base64"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/bingobuling/common-utilities/http_utils"
+	"github.com/bingobuling/common-utilities/utilities"
 	"net/url"
 	"sort"
 	"strings"
@@ -18,18 +18,18 @@ import (
 )
 
 type AliCloudSMSClient struct {
-	AccessKeyId				string //必填
-	AccessKeySecret			string //必填
-	RegionId                string //区域
-	Version					string //
+	AccessKeyId     string //必填
+	AccessKeySecret string //必填
+	RegionId        string //区域
+	Version         string //
 }
 
 func GetAliCloudSMSClient(accessKeyId, accessKeySecret string) *AliCloudSMSClient {
 	client := &AliCloudSMSClient{
-		AccessKeyId:accessKeyId,
-		AccessKeySecret:accessKeySecret,
-		RegionId:defaultRegion,
-		Version:version,
+		AccessKeyId:     accessKeyId,
+		AccessKeySecret: accessKeySecret,
+		RegionId:        defaultRegion,
+		Version:         version,
 	}
 	return client
 }
@@ -39,11 +39,11 @@ func GetAliCloudSMSClientByProfile() *AliCloudSMSClient {
 	return nil
 }
 
-func (p *AliCloudSMSClient) SendMessage(req *AliCloudSMSSendReq) (*AliCloudSMSSendResp,error) {
+func (p *AliCloudSMSClient) SendMessage(req *AliCloudSMSSendReq) (*AliCloudSMSSendResp, error) {
 	params := p.getBaseParams()
-	content,err := json.Marshal(req.TemplateParam)
+	content, err := json.Marshal(req.TemplateParam)
 	if err != nil {
-		return nil, errors.New("parse template param error:"+err.Error())
+		return nil, errors.New("parse template param error:" + err.Error())
 	}
 	params["Action"] = sendMessageAction
 	params["PhoneNumbers"] = req.PhoneNumbers
@@ -52,18 +52,18 @@ func (p *AliCloudSMSClient) SendMessage(req *AliCloudSMSSendReq) (*AliCloudSMSSe
 	params["TemplateParam"] = string(content)
 	params["SmsUpExtendCode"] = req.SmsUpExtendCode
 	params["OutId"] = req.OutId
-	queryStr,signature := p.generateQueryStringAndSignature(params)
+	queryStr, signature := p.generateQueryStringAndSignature(params)
 	reqUrl := smsProductDomain + "?Signature=" + signature + queryStr
 	fmt.Println("reqUrl:", reqUrl)
-	content, err = http_utils.Get(reqUrl,nil)
+	content, err = http_utils.Get(reqUrl, nil)
 	if err != nil {
-		return nil, errors.New("req to send message error:"+err.Error())
+		return nil, errors.New("req to send message error:" + err.Error())
 	}
 	//fmt.Println(string(content))
 	var resp AliCloudSMSSendResp
 	err = json.Unmarshal(content, &resp)
 	if err != nil {
-		return nil, errors.New("unmarshal resp error:"+err.Error())
+		return nil, errors.New("unmarshal resp error:" + err.Error())
 	}
 	return &resp, nil
 }
@@ -84,9 +84,9 @@ func (p *AliCloudSMSClient) getBaseParams() map[string]string {
 }
 
 func (p *AliCloudSMSClient) generateQueryStringAndSignature(params map[string]string) (string, string) {
-	delete(params,"Signature")
+	delete(params, "Signature")
 	keys := make([]string, 0)
-	for key,item := range params {
+	for key, item := range params {
 		if item != "" {
 			keys = append(keys, key)
 		}
@@ -124,8 +124,9 @@ func sign(accessKeySecret, sortQueryStr string) string {
 	return base64.StdEncoding.EncodeToString(h.Sum(nil))
 }
 
-var logGMT,_ = time.LoadLocation("GMT")
-func getTimestampAndNonce() (string,string) {
+var logGMT, _ = time.LoadLocation("GMT")
+
+func getTimestampAndNonce() (string, string) {
 	nonce := utilities.GetRandomStr(32)
 	t := time.Now()
 	timeStamp := t.In(logGMT).Format("2006-01-02T15:04:05Z")

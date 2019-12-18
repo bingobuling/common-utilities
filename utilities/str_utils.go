@@ -10,11 +10,12 @@ import (
 )
 
 var randomStrSource = []byte("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+
 //获取随机字符串
 func GetRandomStr(length int) string {
-	result := make([]byte,length)
+	result := make([]byte, length)
 	r := rand.New(rand.NewSource(time.Now().UnixNano() + rand.Int63())) //增大随机性
-	for i:=0;i<length;i++ {
+	for i := 0; i < length; i++ {
 		result[i] = randomStrSource[r.Intn(len(randomStrSource))]
 	}
 	return string(result)
@@ -24,14 +25,14 @@ func GetRandomStr(length int) string {
 func GetRandomNumStr(length int) string {
 	result := make([]byte, length)
 	r := rand.New(rand.NewSource(time.Now().UnixNano() + rand.Int63())) //增大随机性
-	for i:=0;i<length;i++ {
+	for i := 0; i < length; i++ {
 		result[i] = byte('0' + r.Intn(10)) //0 - 9
 	}
 	return string(result)
 }
 
 func UUID() (string, error) {
-	id,err := uuid.NewV1()
+	id, err := uuid.NewV1()
 	if err != nil {
 		return "", err
 	}

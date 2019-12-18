@@ -4,8 +4,8 @@
 package alipay
 
 import (
-	"common-utilities/payment/alipay/alipayModels"
-	"common-utilities/utilities"
+	"github.com/bingobuling/common-utilities/payment/alipay/alipayModels"
+	"github.com/bingobuling/common-utilities/utilities"
 	"github.com/pkg/errors"
 	"github.com/smartwalle/alipay"
 	"strconv"
@@ -43,13 +43,13 @@ func TransferToAccount(model alipayModels.TransferToAccountReq, alipayClient *Al
 		return nil, err
 	}
 	return &alipayModels.TransferToAccountResp{
-		Code: resp.Body.Code,
-		Msg: resp.Body.Msg,
-		SubCode: resp.Body.SubCode,
-		SubMsg: resp.Body.SubMsg,
+		Code:     resp.Body.Code,
+		Msg:      resp.Body.Msg,
+		SubCode:  resp.Body.SubCode,
+		SubMsg:   resp.Body.SubMsg,
 		OutBizNo: resp.Body.OutBizNo,
-		TradeNo: resp.Body.OrderId,
-		PayDate: utilities.ParseDateTimeStrWithDefault(resp.Body.PayDate, time.Now()),
+		TradeNo:  resp.Body.OrderId,
+		PayDate:  utilities.ParseDateTimeStrWithDefault(resp.Body.PayDate, time.Now()),
 	}, nil
 }
 
@@ -57,7 +57,7 @@ func TransferToAccount(model alipayModels.TransferToAccountReq, alipayClient *Al
 func QueryTransferToAccount(queryReq alipayModels.QueryTransferToAccountReq, alipayClient *AlipayClient) (*alipayModels.QueryTransferToAccountResp, error) {
 	req := alipay.AliPayFundTransOrderQuery{
 		OutBizNo: queryReq.OutBizNo, //二者有一即可
-		OrderId: queryReq.OrderId,
+		OrderId:  queryReq.OrderId,
 	}
 	client := alipay.AliPay(*alipayClient)
 	resp, err := client.FundTransOrderQuery(req)
@@ -65,20 +65,20 @@ func QueryTransferToAccount(queryReq alipayModels.QueryTransferToAccountReq, ali
 		return nil, err
 	}
 	if !resp.IsSuccess() {
-		return &alipayModels.QueryTransferToAccountResp {
-			Code:			resp.Body.Code,
-			Msg:			resp.Body.Msg,
-			SubCode:        resp.Body.SubCode,
-			SubMsg:         resp.Body.SubMsg,
-			ErrorCode:      resp.Body.ErrorCode,
-			FailReason:     resp.Body.FailReason,
+		return &alipayModels.QueryTransferToAccountResp{
+			Code:       resp.Body.Code,
+			Msg:        resp.Body.Msg,
+			SubCode:    resp.Body.SubCode,
+			SubMsg:     resp.Body.SubMsg,
+			ErrorCode:  resp.Body.ErrorCode,
+			FailReason: resp.Body.FailReason,
 		}, nil
 	}
 
 	OrderFee, _ := strconv.ParseFloat(resp.Body.OrderFree, 64)
 	return &alipayModels.QueryTransferToAccountResp{
-		Code:			resp.Body.Code,
-		Msg:			resp.Body.Msg,
+		Code:           resp.Body.Code,
+		Msg:            resp.Body.Msg,
 		SubCode:        resp.Body.SubCode,
 		SubMsg:         resp.Body.SubMsg,
 		ErrorCode:      resp.Body.ErrorCode,

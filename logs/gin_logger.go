@@ -4,8 +4,8 @@
 package logs
 
 import (
-	"common-utilities/http_utils"
 	"fmt"
+	"github.com/bingobuling/common-utilities/http_utils"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"time"

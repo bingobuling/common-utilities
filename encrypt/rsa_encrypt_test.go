@@ -3,15 +3,15 @@
 package encrypt
 
 import (
-	"testing"
 	"fmt"
+	"testing"
 )
 
 func TestRsaEncrypt(t *testing.T) {
-	privateKey,publicKey,_ := GenKeyPairs(2048)
-	b,_ := RsaEncrypt("三分归元气", publicKey)
+	privateKey, publicKey, _ := GenKeyPairs(2048)
+	b, _ := RsaEncrypt("三分归元气", publicKey)
 	fmt.Println(string(b))
-	b,_ = RsaDecrypt(string(b),privateKey)
+	b, _ = RsaDecrypt(string(b), privateKey)
 	fmt.Println(string(b))
 }
 

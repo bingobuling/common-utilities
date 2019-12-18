@@ -6,5 +6,3 @@ package db
 type a struct {
 	name *string
 }
-
-

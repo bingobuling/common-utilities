@@ -28,7 +28,7 @@ func SHA512(content string) string {
 	return encrypt(sha512.New(), content)
 }
 
-func encrypt(h hash.Hash,content string) string {
+func encrypt(h hash.Hash, content string) string {
 	h.Write([]byte(content))
 	cipherStr := h.Sum(nil)
 	return hex.EncodeToString(cipherStr)

@@ -6,8 +6,8 @@ package caches
 
 import (
 	"fmt"
-	"time"
 	"sync"
+	"time"
 )
 
 // 读锁不阻塞读锁
@@ -15,12 +15,12 @@ import (
 // 写锁阻塞读\写锁，直到写锁都释放
 // 待优化
 type SimpleCache struct {
-	rwMutex *sync.RWMutex //读写锁
-	cache map[string]*element //存放的map
+	rwMutex *sync.RWMutex       //读写锁
+	cache   map[string]*element //存放的map
 	//strategy SimpleStrategy //过期策略
-	globalExpire int64 //全局的过期时间
+	globalExpire      int64 //全局的过期时间
 	latestGarbageTime int64 //上一次垃圾回收时间
-	hasInitGarbage	  bool
+	hasInitGarbage    bool
 }
 
 const (
@@ -35,8 +35,8 @@ func CreateSimpleCache() SimpleCache {
 // 创建一个指定过期时间的SimpleCache
 func CreateSimpleCacheExpire(globalDur time.Duration) SimpleCache {
 	sc := SimpleCache{
-		rwMutex: new(sync.RWMutex),
-		cache: make(map[string]*element),
+		rwMutex:      new(sync.RWMutex),
+		cache:        make(map[string]*element),
 		globalExpire: int64(globalDur),
 	}
 	go sc.beginGarbageCollection() //开启垃圾回收,20分钟回收一次
@@ -49,10 +49,10 @@ func (p *SimpleCache) Delete(key string) {
 	p.rwMutex.Unlock()
 }
 
-func (p *SimpleCache) Put(key string,value interface{}) {
+func (p *SimpleCache) Put(key string, value interface{}) {
 	ele := element{
-		value: value,
-		expire: p.globalExpire,
+		value:      value,
+		expire:     p.globalExpire,
 		createTime: time.Now(),
 	}
 	p.rwMutex.Lock()
@@ -62,8 +62,8 @@ func (p *SimpleCache) Put(key string,value interface{}) {
 
 func (p *SimpleCache) PutAssignExpire(key string, value interface{}, dur time.Duration) {
 	ele := element{
-		value: value,
-		expire: int64(dur),
+		value:      value,
+		expire:     int64(dur),
 		createTime: time.Now(),
 	}
 	p.rwMutex.Lock()
@@ -71,10 +71,10 @@ func (p *SimpleCache) PutAssignExpire(key string, value interface{}, dur time.Du
 	p.rwMutex.Unlock()
 }
 
-func (p *SimpleCache) Get(key string) interface{}{
+func (p *SimpleCache) Get(key string) interface{} {
 	p.rwMutex.RLock()
 	releasedReadLock := false
-	defer func(){
+	defer func() {
 		if !releasedReadLock {
 			p.rwMutex.RUnlock()
 		}
@@ -118,10 +118,11 @@ func (p *SimpleCache) beginGarbageCollection() {
 		}
 	}
 }
+
 //垃圾回收
 func (p *SimpleCache) garbageCollection() {
-	if len(p.cache) > 100 && time.Now().UnixNano() - p.latestGarbageTime >= p.globalExpire { //大于回收时间
-		fmt.Println("begin garbage collection:",time.Now())
+	if len(p.cache) > 100 && time.Now().UnixNano()-p.latestGarbageTime >= p.globalExpire { //大于回收时间
+		fmt.Println("begin garbage collection:", time.Now())
 		p.rwMutex.Lock() //加锁
 		defer func() {
 			if err := recover(); err != nil {
@@ -129,11 +130,11 @@ func (p *SimpleCache) garbageCollection() {
 			}
 			p.rwMutex.Unlock()
 		}()
-		if time.Now().UnixNano() - p.latestGarbageTime < p.globalExpire {
+		if time.Now().UnixNano()-p.latestGarbageTime < p.globalExpire {
 			return
 		}
 		p.latestGarbageTime = time.Now().UnixNano()
-		for key,item := range p.cache {
+		for key, item := range p.cache {
 			if item.isExpire() {
 				delete(p.cache, key)
 			}
@@ -141,13 +142,12 @@ func (p *SimpleCache) garbageCollection() {
 	}
 }
 
-
 type element struct {
-	value interface{}
-	expire int64
+	value      interface{}
+	expire     int64
 	createTime time.Time
 }
 
 func (e *element) isExpire() bool {
-	return time.Now().UnixNano() - e.createTime.UnixNano() > e.expire
+	return time.Now().UnixNano()-e.createTime.UnixNano() > e.expire
 }

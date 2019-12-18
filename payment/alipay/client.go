@@ -6,7 +6,8 @@ package alipay
 import "github.com/smartwalle/alipay"
 
 type AlipayClient alipay.AliPay
-func GetAliPayClient(appId,privateKey,publicKey string) *AlipayClient {
+
+func GetAliPayClient(appId, privateKey, publicKey string) *AlipayClient {
 	client := alipay.New(
 		appId,
 		"",

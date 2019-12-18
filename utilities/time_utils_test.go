@@ -9,6 +9,6 @@ import (
 )
 
 func TestT(t *testing.T) {
-	fmt.Println("z:",time.Now().UnixNano() / int64(time.Millisecond))
+	fmt.Println("z:", time.Now().UnixNano()/int64(time.Millisecond))
 	fmt.Println("b:", time.Now().Unix())
 }

@@ -5,18 +5,18 @@ package http_utils
 
 import (
 	"encoding/json"
+	"fmt"
+	"github.com/pkg/errors"
 	"io"
 	"io/ioutil"
 	"net/http"
-	"github.com/pkg/errors"
 	"strconv"
-	"time"
 	"strings"
-	"fmt"
+	"time"
 )
 
 // Get请求
-func Get(url string, header map[string]string) ([]byte, error){
+func Get(url string, header map[string]string) ([]byte, error) {
 	return sendHttpRequest("GET", url, nil, header)
 }
 
@@ -34,7 +34,7 @@ func GetAndUnmarshal(url string, header map[string]string, respPointer interface
 //	return nil, errors.New("un implements method!")
 //}
 
-func Post(url string, body io.Reader, header map[string]string) ([]byte, error){
+func Post(url string, body io.Reader, header map[string]string) ([]byte, error) {
 	return sendHttpRequest("POST", url, body, header)
 }
 
@@ -46,7 +46,7 @@ func PostAndUnmarshal(url string, body io.Reader, header map[string]string, resp
 	}
 	return json.Unmarshal(byt, respPointer)
 }
-func GenQueryStr(url string, jsonBytes []byte) (string, error){
+func GenQueryStr(url string, jsonBytes []byte) (string, error) {
 	if len(jsonBytes) == 0 {
 		return url, nil
 	}
@@ -102,7 +102,7 @@ func sendHttpRequest(method, url string, body io.Reader, header map[string]strin
 		return out, err
 	}
 	if resp.StatusCode > 299 || resp.StatusCode < 200 {
-		return out, errors.New("http response status:"+ strconv.Itoa(resp.StatusCode) + " ,resp:" + string(out))
+		return out, errors.New("http response status:" + strconv.Itoa(resp.StatusCode) + " ,resp:" + string(out))
 	}
 	return out, nil
 }
@@ -116,7 +116,7 @@ func setHeaders(req *http.Request, header *map[string]string) {
 	if xh["Content-Type"] == "" {
 		req.Header.Add("Content-Type", "application/json")
 	}
-	for key,value := range xh {
+	for key, value := range xh {
 		req.Header.Add(key, value)
 	}
 }

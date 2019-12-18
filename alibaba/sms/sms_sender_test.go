@@ -9,13 +9,13 @@ import (
 )
 
 func TestSendMessage(t *testing.T) {
-	smsClient := GetAliCloudSMSClient("LTAI5TR6wXkOVAUg","bNMQJkDtxXn5O8pth2w0f6h5VliV50")
+	smsClient := GetAliCloudSMSClient("LTAI5TR6wXkOVAUg", "bNMQJkDtxXn5O8pth2w0f6h5VliV50")
 	resp, err := smsClient.SendMessage(&AliCloudSMSSendReq{
 		PhoneNumbers: "18520227050",
-		SignName: 	  "立行共享车",
+		SignName:     "立行共享车",
 		TemplateCode: "SMS_143714609",
 		TemplateParam: map[string]string{
-			"code":"123123",
+			"code": "123123",
 		},
 		OutId: "wx233233i",
 	})
@@ -24,7 +24,7 @@ func TestSendMessage(t *testing.T) {
 }
 
 func TestSendMessage2(t *testing.T) {
-	loc,_ := time.LoadLocation("GMT")
+	loc, _ := time.LoadLocation("GMT")
 	ti := time.Now()
 	fmt.Println(ti.Location())
 	fmt.Println(ti.In(loc).Format("2006-01-02 15:04:05"))

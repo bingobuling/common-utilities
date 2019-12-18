@@ -4,22 +4,22 @@
 package common_models
 
 type PageModel struct {
-	List interface{} `json:"list" form:"list"`
+	List       interface{} `json:"list" form:"list"`
 	Pagination *Pagination `json:"pagination" form:"pagination"`
 }
 
 type Pagination struct {
 	CurrentPage int `json:"current_page" form:"current_page"`
-	PageSize int 	`json:"page_size" form:"page_size"`
-	LastPage int 	`json:"last_page"`
-	Total int 		`json:"total" form:"total"`
+	PageSize    int `json:"page_size" form:"page_size"`
+	LastPage    int `json:"last_page"`
+	Total       int `json:"total" form:"total"`
 }
 
 func BuildPagination(currentPage, pageSize, totalCount int) *Pagination {
 	p := &Pagination{
 		CurrentPage: currentPage,
-		PageSize: pageSize,
-		Total: totalCount,
+		PageSize:    pageSize,
+		Total:       totalCount,
 	}
 	p.LastPage = p.GetLastPage()
 	return p
@@ -61,5 +61,3 @@ func (p *Pagination) GetLastPage() int {
 	}
 	return (p.Total + p.GetPageSize()) / p.GetPageSize()
 }
-
-

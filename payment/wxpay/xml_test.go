@@ -1,10 +1,11 @@
 package wxpay
 
 import (
-	"testing"
 	"encoding/xml"
 	"fmt"
+	"testing"
 )
+
 var transferRespXML = `
 <xml>
 
@@ -30,9 +31,10 @@ var transferRespXML = `
 
 </xml>
 `
+
 func TestTransferToChangeRespXmlDecode(t *testing.T) {
 	resp := &TransferToChangeResp{}
-	xml.Unmarshal([]byte(transferRespXML),resp)
+	xml.Unmarshal([]byte(transferRespXML), resp)
 	fmt.Println(resp)
 }
 
@@ -67,9 +69,9 @@ var getTransferInfoXML = `
 
 </xml>
 `
+
 func TestGetTransferToChangeInfoXmlDecode(t *testing.T) {
 	resp := &GetTransferToChangeInfoResp{}
-	xml.Unmarshal([]byte(getTransferInfoXML),resp)
+	xml.Unmarshal([]byte(getTransferInfoXML), resp)
 	fmt.Println(resp)
 }
-

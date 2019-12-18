@@ -4,7 +4,7 @@ package eft_encrypt
 
 import (
 	"encoding/base64"
-	"common-utilities/encrypt"
+	"github.com/bingobuling/common-utilities/encrypt"
 )
 
 const (
@@ -13,8 +13,8 @@ const (
 
 var transferKitBase64Encoding = base64.NewEncoding(base64Encoder)
 
-func EftEncrypt(content string) string{
-	return byteEncrypt(encrypt.Base64Encode(transferKitBase64Encoding,content))
+func EftEncrypt(content string) string {
+	return byteEncrypt(encrypt.Base64Encode(transferKitBase64Encoding, content))
 }
 
 func EftDecrypt(content string) (string, error) {

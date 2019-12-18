@@ -4,14 +4,15 @@
 package encrypt
 
 import (
+	"crypto/rand"
+	"crypto/rsa"
+	"crypto/x509"
 	"encoding/pem"
 	"github.com/pkg/errors"
-	"crypto/x509"
-	"crypto/rsa"
-	"crypto/rand"
 )
+
 // Encrypt
-func RsaEncrypt(content string,publicKey string) ([]byte,error) {
+func RsaEncrypt(content string, publicKey string) ([]byte, error) {
 	block, _ := pem.Decode([]byte(publicKey))
 	if block == nil {
 		return nil, errors.New("public error")
@@ -27,7 +28,7 @@ func RsaEncrypt(content string,publicKey string) ([]byte,error) {
 }
 
 // Decrypt
-func RsaDecrypt(content string,privateKey string) ([]byte,error) {
+func RsaDecrypt(content string, privateKey string) ([]byte, error) {
 	block, _ := pem.Decode([]byte(privateKey))
 	if block == nil {
 		return nil, errors.New("private key error!")
@@ -38,11 +39,11 @@ func RsaDecrypt(content string,privateKey string) ([]byte,error) {
 	}
 	contentBytes := []byte(content)
 	resultBytes, err := rsa.DecryptPKCS1v15(rand.Reader, privateInterface, contentBytes)
-	return resultBytes,err
+	return resultBytes, err
 }
 
 // Generate RSA PrivateKey PublicKey
-func GenKeyPairs(bits int) (privateKey ,publicKey string,err error) {
+func GenKeyPairs(bits int) (privateKey, publicKey string, err error) {
 	priKey, err := rsa.GenerateKey(rand.Reader, bits)
 	if err != nil {
 		return "", "", err

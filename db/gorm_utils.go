@@ -3,7 +3,7 @@
 package db
 
 import (
-	"common-utilities/common_models"
+	"github.com/bingobuling/common-utilities/common_models"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
@@ -15,10 +15,11 @@ import (
 // 当只连接一个数据源的时候，可以直接使用GormClient
 // 否则应当自己持有管理InitGormDB返回的GormDB
 var GormClient *GormDB
+
 type GormDB struct {
 	dbConfig *DBConfig
-	lock   sync.RWMutex // lock
-	Client *gorm.DB     // mysql client
+	lock     sync.RWMutex // lock
+	Client   *gorm.DB     // mysql client
 }
 
 // 本方法会给GormClient赋值，多次调用GormClient指向最后一次调用的GormDB
@@ -41,7 +42,7 @@ func InitGormDB(dbConfig *DBConfig) *GormDB {
 		logrus.Fatalln("db ping fail", err)
 		return nil
 	}
-	logrus.WithField("addr",dbConfig.DBAddr ).Infoln("connecting db success!")
+	logrus.WithField("addr", dbConfig.DBAddr).Infoln("connecting db success!")
 	myDB.Client = db
 	myDB.initByDBConfigs()
 	myDB.autoCreateTable()
@@ -51,14 +52,14 @@ func InitGormDB(dbConfig *DBConfig) *GormDB {
 }
 
 // 分页查询
-func (p *GormDB) PageQuery(db *gorm.DB, pagination *common_models.Pagination, resultPointer interface{}) error{
+func (p *GormDB) PageQuery(db *gorm.DB, pagination *common_models.Pagination, resultPointer interface{}) error {
 	totalCount := 0
 	err := db.Count(&totalCount).Error
 	if err != nil {
 		return err
 	}
 	pagination.Total = totalCount
-	pagination.LastPage = (totalCount+1)/pagination.GetPageSize()
+	pagination.LastPage = (totalCount + 1) / pagination.GetPageSize()
 	if pagination.LastPage == 0 {
 		pagination.LastPage = 1
 	}
@@ -82,7 +83,7 @@ func (p *GormDB) reConnect() {
 		return
 	}
 	p.initByDBConfigs()
-	logrus.WithField("db addr",p.dbConfig.DBAddr).Infoln("reconnect db success!")
+	logrus.WithField("db addr", p.dbConfig.DBAddr).Infoln("reconnect db success!")
 }
 
 // 初始化参数
@@ -98,8 +99,8 @@ func (p *GormDB) autoCreateTable() {
 	if p.dbConfig.AutoCreateTables == nil || len(p.dbConfig.AutoCreateTables) == 0 {
 		return
 	}
-	logrus.WithField("addr",p.dbConfig.DBAddr).Infoln("begin initAutoDB")
-	for _,item := range p.dbConfig.AutoCreateTables {
+	logrus.WithField("addr", p.dbConfig.DBAddr).Infoln("begin initAutoDB")
+	for _, item := range p.dbConfig.AutoCreateTables {
 		p.autoCreate(item)
 	}
 }
@@ -107,7 +108,7 @@ func (p *GormDB) autoCreateTable() {
 func (p *GormDB) autoCreate(it interface{}) {
 	err := p.Client.AutoMigrate(it).Error
 	if err != nil {
-		logrus.Errorln("auto create ",it," error",err)
+		logrus.Errorln("auto create ", it, " error", err)
 	}
 }
 

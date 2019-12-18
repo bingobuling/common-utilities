@@ -4,12 +4,12 @@
 package alipay
 
 import (
+	"github.com/bingobuling/common-utilities/payment/alipay/alipayModels"
 	"github.com/smartwalle/alipay"
-	"common-utilities/payment/alipay/alipayModels"
 )
 
 // 下载bill
-func DownloadBill(params *alipayModels.BillDownloadQueryReq ,alipayClient *AlipayClient) (*alipayModels.BillDownloadQueryResp, error){
+func DownloadBill(params *alipayModels.BillDownloadQueryReq, alipayClient *AlipayClient) (*alipayModels.BillDownloadQueryResp, error) {
 	client := alipay.AliPay(*alipayClient)
 	query := alipay.BillDownloadURLQuery{
 		BillDate: params.BillDate,
