@@ -1,4 +1,4 @@
-module common-utilities
+module github.com/bingobuling/common-utilities
 
 go 1.13
 
