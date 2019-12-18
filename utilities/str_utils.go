@@ -31,10 +31,7 @@ func GetRandomNumStr(length int) string {
 	return string(result)
 }
 
-func UUID() (string, error) {
-	id, err := uuid.NewV1()
-	if err != nil {
-		return "", err
-	}
-	return id.String(), nil
+func UUID() string {
+	uuid := uuid.NewV1()
+	return uuid.String()
 }
